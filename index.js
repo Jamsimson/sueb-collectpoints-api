@@ -17,7 +17,7 @@ app.listen(3000, () =>{
 /**
  * Routes.
  */
-const userRouter = require("./routes/users")
+const userRouter = require("./src/routes/users")
 
 
 app.use('/api/v1',userRouter)
