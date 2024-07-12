@@ -1,4 +1,4 @@
-const db = require('../service/db');
+const Model = require('../Models/user');
 
 exports.getStart = (req, res, next) => {
     return res.status(200).json({message: "Welcome to SUEB collect point"})
@@ -6,50 +6,44 @@ exports.getStart = (req, res, next) => {
 
 // create account
 exports.createNewAccount = async (req,res,next) => {
-    const {username,phonenumber,point} = req.body;
+    const data = new Model(req.body)
     try {
-        const [rows] = await db.query(`INSERT INTO Users (username, phonenumber, point) VALUES (?,?,?)`,[username,phonenumber,point])
-        res.status(201).json({message:"New user successfully"});
-    } catch (err) {
-        console.log(`There is an error: ${err}`);
-        return res.status(500).send()
+        const dataToSave = await data.save();
+        res.status(200).json(dataToSave)
+    }
+    catch (error) {
+        res.status(400).json({message: error.message})
     }
 }
 
 // read all data
 exports.readAllData = async (req,res,next) =>{
     try {
-        const [rows] = await db.query(`SELECT * FROM Users`)
-        return res.status(201).json(rows);
-    } catch (err) {
-        console.log(`There is an error: ${err}`);
-        return res.status(500).send()
+        const data = await Model.find();
+        res.status(200).json(data)
+    }
+    catch (error) {
+        res.status(400).json({message: error.message})
     }
 }
 
 
 // get single user from db
 exports.getSingleData = async (req,res,next) => {
-    const phone = req.params.phone;
     try {
-        const [rows] = await db.query(`SELECT * FROM Users WHERE phonenumber = ?`,phone)
-        return res.status(201).json(rows);
-    } catch (err) {
-        console.log(`There is an error: ${err}`);
-        return res.status(500).send()
+        const data = await Model.findOne({"phonenumber":req.params.phone})
+        res.status(200).json(data)
+    } catch (error) {
+        res.status(400).json({message: error.message})
     }
 }
 
 // Update points single user
 exports.updatePoint = async (req,res,next) => {
-    const phone = req.params.phone;
-    const point = req.body.point
-
     try {
-        const [rows] = await db.query(`UPDATE Users SET point =  point + ? WHERE phonenumber = ?`,[point,phone])
-        return res.status(201).json({message:"Update point succesfully"});
-    } catch (err) {
-        console.log(`There is an error: ${err}`);
-        return res.status(500).send()
+        const data = await Model.updateOne({"phonenumber":req.params.phone},{$inc:{"point":req.body.point}})
+        res.status(200).json({message:'Point update successful'})
+    } catch (error) {
+        res.status(400).json({message: error.message})
     }
 }

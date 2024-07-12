@@ -1,13 +1,23 @@
 #!/usr/bin/env node
-
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
+require('dotenv').config()
+
+const url = process.env.URL
+
 
 // parses incoming requests with JSON payloads
 app.use(express.json());
 // parses incoming requests with urlencoded payloads
 // extended: true - parsing the URL-encoded data with the querystring library
 app.use(express.urlencoded({extended: true}));
+
+// MongoDB connection
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected...'))
+    .catch(err => console.log(err));
 
 // port _000
 app.listen(3000, () =>{
