@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 const mongoose = require('mongoose');
-const MongoClient = require("mongodb").MongoClient;
-
 const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
@@ -19,26 +17,10 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 // MongoDB connection
-// mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
-//     .then(() => console.log('MongoDB connected...'))
-//     .catch(err => console.log(err));
-const client = new MongoClient(url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-  
-  async function run() {
-    try {
-      await client.connect();
-      const globalAndUS = client.db('covid19').collection("global_and_us");
-      const cursor = globalAndUS.find({ country: "France" }).sort(["date", -1]).limit(2);
-      await cursor.forEach(console.dir);
-    } finally {
-      await client.close();
-    }
-  }
-  
-  run().catch(console.dir);
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected...'))
+    .catch(err => console.log(err));
+
 
 // port _000
 app.listen(3000, () =>{
