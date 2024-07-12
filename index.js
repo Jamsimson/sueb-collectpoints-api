@@ -5,7 +5,8 @@ const express = require('express');
 const app = express();
 require('dotenv').config()
 
-const url = process.env.MONGO_URL
+// const url = process.env.MONGO_URL
+const url = "mongodb+srv://motana:Cuf7AAw5Tl2AasgY@cluster0.wsq6cda.mongodb.net/"
 
 app.use(bodyParser.json());
 // parses incoming requests with JSON payloads
