@@ -5,6 +5,7 @@ const express = require('express');
 const app = express();
 require('dotenv').config()
 
+// url mongodb
 const url = process.env.MONGO_URL
 
 
