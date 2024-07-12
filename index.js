@@ -5,9 +5,9 @@ const express = require('express');
 const app = express();
 require('dotenv').config()
 
-const url = process.env.URL
+const url = process.env.MONGO_URL
 
-
+app.use(bodyParser.json());
 // parses incoming requests with JSON payloads
 app.use(express.json());
 // parses incoming requests with urlencoded payloads
